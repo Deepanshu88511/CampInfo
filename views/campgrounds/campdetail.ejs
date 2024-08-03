@@ -1,0 +1,101 @@
+<% layout('./layouts/boilerplate') %>
+
+  <div class="container">
+    <h1>Details</h1>
+
+    <div class="card mb-3">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="<%= campground.image %>" class="card-img" alt="Campground Image"
+            style="max-width: 100%; max-height: 300px; object-fit: cover;">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h2 class="card-title">
+              <%= campground.title %>
+            </h2>
+            <p class="card-text"><b>Price:</b>
+              <%= campground.price %>
+            </p>
+            <p class="card-text"><b>Location:</b>
+              <%= campground.location %>
+            </p>
+            <p class="card-text"><b>Description:</b>
+              <%= campground.description %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="/campgrounds/<%= campground._id %>/edit" class="btn btn-primary">Edit Campground</a>
+
+    <form action="/campgrounds/<%= campground._id %>?_method=delete" method="post" class="mt-3">
+      <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+
+    <!-- Review Section -->
+    <div class="card mt-5">
+      <div class="card-header">
+        <h3>Leave a Review</h3>
+      </div>
+      <div class="card-body">
+        <form action="/campgrounds/<%= campground._id %>/reviews" method="post" class="needs-validation" novalidate>
+          <div class="form-group">
+            <label for="rating">Rating</label>
+            <div class="d-flex align-items-center">
+              <input type="range" class="form-control-range" id="rating" name="review[rating]" min="0" max="5" step="1"
+                value="0" oninput="updateRatingValue(this.value)" style="width: 100%;" required>
+              <span id="ratingValue" class="ml-3">0</span>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+              <span>0</span>
+              <span>5</span>
+            </div>
+            <div class="invalid-feedback">
+              Please provide a rating.
+            </div>
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+          </div>
+          <div class="form-group mt-3">
+            <label for="comment">Comment</label>
+            <textarea class="form-control" id="comment" name="review[comment]" rows="4" required></textarea>
+            <div class="invalid-feedback">
+              Please provide a comment.
+            </div>
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Display Reviews Section -->
+    <div class="card mt-5">
+      <div class="card-header">
+        <h3>Reviews</h3>
+      </div>
+      <div class="card-body">
+        <% if (campground.reviews.length> 0) { %>
+          <% campground.reviews.forEach(function(review) { %>
+            <div class="review mb-4 p-3 border rounded">
+              <h5>Rating: <%= review.rating %>/5</h5>
+              <p>
+                <%= review.comment %>
+              </p>
+              <form action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=delete" method="post"
+                class="d-inline">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+            </div>
+            <% }); %>
+              <% } else { %>
+                <p>No reviews yet. Be the first to leave a review!</p>
+                <% } %>
+      </div>
+    </div>
+  </div>

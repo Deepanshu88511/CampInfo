@@ -1,0 +1,13 @@
+.error-container {
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+
+  @media (max-width: 767.98px) { /* For mobile screens */
+    .navbar-nav {
+      margin-top: 1rem; /* Adjust as needed */
+    }
+  }
