@@ -1,3 +1,13 @@
+/* General Container Style */
+.container {
+  max-width: 1100px;
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  padding: 30px;
+  margin: 0 auto; /* Center the container */
+}
+
+/* Error Container Style */
 .error-container {
   text-align: center;
   padding: 20px;
@@ -6,25 +16,84 @@
   background-color: #fff;
 }
 
-.container {
-  max-width: 800px;
+/* Card Styles */
+.card {
+  background-color: #ffffff;
 }
 
-.container {
-  max-width: 1100px;
-}
 .card-title {
   color: #007bff; /* Customize the title color */
 }
 
+.card-header {
+  background-color: #4a90e2;
+}
 
+/* Button Styles */
+.btn-primary {
+  background-color: #4a90e2;
+  border: none;
+  margin-top: 20px; /* Added margin for spacing */
+}
 
+.btn-primary:hover {
+  background-color: #357abd;
+}
 
+.btn-danger {
+  background-color: #e94e77;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #d43f5e;
+}
+
+/* Form Control Styles */
+.form-control:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  font-weight: bold;
+}
+
+.invalid-feedback,
+.valid-feedback {
+  display: none;
+}
+
+.was-validated .form-control:valid ~ .valid-feedback {
+  display: block;
+}
+
+.was-validated .form-control:invalid ~ .invalid-feedback {
+  display: block;
+}
+
+/* Input Group */
+.input-group-prepend .input-group-text {
+  background-color: #e9ecef;
+}
+
+/* Review Section */
+.review {
+  background-color: #f1f1f1;
+}
+
+/* Star Rating Styles */
+.starability-growRotate .input-no-rate + label {
+  display: none;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 767.98px) {
-
-  /* For mobile screens */
   .navbar-nav {
-    margin-top: 1rem;
-    /* Adjust as needed */
+    margin-top: 1rem; /* Adjust as needed */
   }
 }

@@ -68,9 +68,14 @@ app.use((req, res, next) => {
   next();
 });
 
+// app.get('/', (req, res) => {
+//   res.render('home');
+// });
+
 app.get('/', (req, res) => {
-  res.render('home');
+  res.redirect('/campgrounds');
 });
+
 
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id/reviews', reviewRoutes);

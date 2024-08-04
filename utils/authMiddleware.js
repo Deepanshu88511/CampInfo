@@ -1,5 +1,5 @@
-const Campground = require('../models/campground'); // Ensure the correct path to the Campground model
-
+const Campground = require('../models/campground');
+const { campgroundSchema, reviewSchema } = require('../Schemas')
 const isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
         req.flash("error", "You must be signed in first");
@@ -21,4 +21,22 @@ const isOwner = async (req, res, next) => {
 
 };
 
-module.exports = { isLoggedIn, isOwner };
+const validateCampground = (req, res, next) => {
+    const { error } = campgroundSchema.validate(req.body)
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new expressError(msg, 400)
+    }
+    else next()
+}
+
+const validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body)
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new expressError(msg, 400)
+    }
+    else next()
+}
+
+module.exports = { isLoggedIn, isOwner, validateCampground, validateReview };
