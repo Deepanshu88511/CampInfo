@@ -3,7 +3,7 @@
 <div class="container my-5">
   <h1 class="mb-4 text-center text-primary">Edit Campground</h1>
 
-  <form action="/campgrounds/<%= campground._id %>?_method=put" method="post" class="needs-validation" novalidate>
+  <form action="/campgrounds/<%= campground._id %>?_method=put" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
     <div class="form-group">
       <label for="title">Title:</label>
       <input type="text" class="form-control" id="title" name="campground[title]" value="<%= campground.title %>" required>
@@ -42,15 +42,32 @@
       </div>
     </div>
 
+    <!-- Display Existing Images -->
     <div class="form-group">
-      <label for="image">Image URL:</label>
-      <input type="text" class="form-control" id="image" name="campground[image]" value="<%= campground.image %>" required>
-      <div class="invalid-feedback">
-        Please provide an image URL.
+      <label>Existing Images:</label>
+      <div class="row">
+        <% campground.images.forEach(function(image, index) { %>
+          <div class="col-md-3 thumbnail-wrapper">
+            <div class="thumbnail">
+              <img src="<%= image.url %>" class="img-thumbnail" alt="Campground Image">
+              <button type="button" class="btn btn-danger btn-sm btn-block mt-2 delete-image" data-filename="<%= image.filename %>">Delete</button>
+            </div>
+          </div>
+        <% }); %>
       </div>
-      <div class="valid-feedback">
-        Looks good!
+    </div>
+
+    <!-- File Input for New Images -->
+    <div class="form-group">
+      <label for="images">Upload New Images:</label>
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="images" name="image" multiple>
+        <label class="custom-file-label" for="images">Choose files...</label>
+        <div class="invalid-feedback">
+          Please upload at least one image.
+        </div>
       </div>
+      <div id="file-names" class="mt-2"></div>
     </div>
 
     <div class="form-group">

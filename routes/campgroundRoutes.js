@@ -16,13 +16,16 @@ const { isOwner } = require('../utils/authMiddleware')
 
 const { validateCampground } = require('../utils/authMiddleware')
 
+const { storage } = require('../cloudinary')
+
+const multer = require('multer')
+const upload = multer({ storage })
 
 
 router.route('/')
     .get(wrapAsync(campgrounds.allCampgrounds))
-    .post(validateCampground, isLoggedIn, wrapAsync(campgrounds.createCampground))
+    .post(isLoggedIn, upload.array('image'), validateCampground, wrapAsync(campgrounds.createCampground))
 
-    
 router.get('/new', isLoggedIn, campgrounds.renderNewForm)
 
 
@@ -31,7 +34,7 @@ router.get('/:id/edit', isLoggedIn, isOwner, wrapAsync(campgrounds.renderEditFor
 
 router.route('/:id')
     .get(isLoggedIn, wrapAsync(campgrounds.viewCampground))
-    .put(validateCampground, isOwner, wrapAsync(campgrounds.editCampground))
+    .put(isOwner, upload.array('image'), validateCampground, wrapAsync(campgrounds.editCampground))
     .delete(isLoggedIn, isOwner, wrapAsync(campgrounds.deleteCampground))
 
 
