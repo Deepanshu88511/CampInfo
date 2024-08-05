@@ -1,54 +1,11 @@
 <% layout('./layouts/boilerplate') %>
 
-<link rel="stylesheet" href="/stylesheets/stars.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
-<style>
-  .carousel-item img {
-    object-fit: cover;
-    height: 300px;
-    width: 100%;
-    cursor: pointer; /* Added cursor pointer for images */
-  }
-  .card-body {
-    padding: 1.5rem;
-  }
-  .card-header {
-    background-color: #007bff;
-    color: white;
-  }
-  .review {
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 0.25rem;
-    padding: 1rem;
-  }
-  .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-  }
-  .btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-  }
-  .carousel-control-prev-icon,
-  .carousel-control-next-icon {
-    filter: invert(100%);
-  }
-  .form-group label {
-    font-weight: bold;
-  }
-  .review h5 {
-    margin-bottom: 0.5rem;
-  }
-  .review p {
-    margin-bottom: 0.75rem;
-  }
-</style>
 
 <h1 class="mb-4 text-center text-primary">Campground Details</h1>
 <div class="container my-5">
+
+  <div id='map' style='width: 100%; height: 300px;' class="mb-4"></div>
 
   <!-- Campground Card -->
   <div class="card mb-4 shadow-lg border-0 rounded-lg">
@@ -75,17 +32,19 @@
       </div>
       <div class="col-md-6">
         <div class="card-body">
-          <h2 class="card-title font-weight-bold text-dark"><%= campground.title %></h2>
+          <h2 class="card-title font-weight-bold text-dark">
+            <%= campground.title %>
+          </h2>
           <p class="card-text text-muted"><strong>Price:</strong> $<%= campground.price %></p>
           <p class="card-text text-muted"><strong>Location:</strong> <%= campground.location %></p>
           <p class="card-text text-muted"><strong>Description:</strong> <%= campground.description %></p>
           <p class="card-text text-muted"><strong>Owner:</strong> <%= campground.owner.username %></p>
-          
+
           <% if (currentUser && campground.owner.equals(currentUser._id)) { %>
             <div class="d-flex justify-content-start mt-4">
-              <a href="/campgrounds/<%= campground._id %>/edit" class="btn btn-primary mr-2"><i class="fas fa-edit"></i> Edit Campground</a>
+              <a href="/campgrounds/<%= campground._id %>/edit" class="btn btn-primary mr-2 mb-2"><i class="fas fa-edit"></i> Edit Campground</a>
               <form action="/campgrounds/<%= campground._id %>?_method=delete" method="post">
-                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                <button type="submit" class="btn btn-danger mt-2"><i class="fas fa-trash"></i> Delete</button>
               </form>
             </div>
           <% } %>
@@ -102,7 +61,7 @@
     <div class="card-body">
       <form action="/campgrounds/<%= campground._id %>/reviews" method="post" class="needs-validation" novalidate>
         <fieldset class="starability-growRotate">
-          <legend>First rating:</legend>
+          <legend>Rate this campground:</legend>
           <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
           <input type="radio" id="first-rate1" name="review[rating]" value="1" />
           <label for="first-rate1" title="Terrible">1 star</label>
@@ -139,41 +98,53 @@
       <% if (campground.reviews.length > 0) { %>
         <% campground.reviews.forEach(function (review) { %>
           <div class="review mb-4 p-3 border rounded-lg shadow-sm">
-            <h5 class="mb-2 font-weight-bold"><%= review.owner.username %></h5>
+            <h5 class="mb-2 font-weight-bold">
+              <%= review.owner.username %>
+            </h5>
             <p class="starability-result" data-rating="<%= review.rating %>">
               Rated: <%= review.rating %> stars
             </p>
-            <p class="mb-1"><%= review.comment %></p>
+            <p class="mb-1">
+              <%= review.comment %>
+            </p>
             <% if (currentUser && review.owner.equals(currentUser._id)) { %>
               <form action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=delete" method="post" class="d-inline">
                 <button type="submit" class="btn btn-danger btn-sm mt-2"><i class="fas fa-trash"></i> Delete</button>
               </form>
             <% } %>
           </div>
-        <% }); %>
+        <% }) %>
       <% } else { %>
         <p class="text-muted">No reviews yet. Be the first to leave a review!</p>
       <% } %>
     </div>
   </div>
-</div>
 
-<!-- Modals for Fullscreen Images -->
-<% campground.images.forEach((img, index) => { %>
-  <div class="modal fade" id="modal-<%= index %>" tabindex="-1" aria-labelledby="modalLabel-<%= index %>" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalLabel-<%= index %>">Image <%= index + 1 %></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <img src="<%= img.url %>" class="d-block w-100" alt="Campground Image">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+  <!-- Modals for Fullscreen Images -->
+  <% campground.images.forEach((img, index) => { %>
+    <div class="modal fade" id="modal-<%= index %>" tabindex="-1" aria-labelledby="modalLabel-<%= index %>" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel-<%= index %>">Image <%= index + 1 %></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <img src="<%= img.url %>" class="d-block w-100" alt="Campground Image">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-<% }); %>
+  <% }) %>
+
+</div>
+
+<script>
+  const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
+  const campground = <%- JSON.stringify(campground) %>;
+</script>
+
+<script src="/javascripts/showPageMap.js"></script> <!-- do not change anything in scripts -->

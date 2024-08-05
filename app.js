@@ -80,6 +80,10 @@ app.get('/', (req, res) => {
   res.redirect('/campgrounds');
 });
 
+app.get('/map-config', (req, res) => {
+  res.json({ maptilerApiKey: process.env.MAPTILER_API_KEY });
+});
+
 
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id/reviews', reviewRoutes);
