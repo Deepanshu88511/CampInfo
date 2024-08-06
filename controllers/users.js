@@ -51,6 +51,7 @@ module.exports.userLogin = async (req, res) => {
         const { username, password } = req.body;
         req.flash("success", `Hello ${username}, Welcome to camping!`)
         res.redirect('/campgrounds')
+        
     } catch (err) {
         req.flash("error", `${err.message}`)
     }
