@@ -114,3 +114,16 @@ module.exports.viewCampground = async (req, res) => {
     res.render('campgrounds/campdetail', { campground })
 }
 
+
+// search query
+
+module.exports.searchCampgrounds = async (req, res) => {
+    const { location } = req.query;
+    if (!location) {
+      req.flash('error', 'Please enter a location');
+      return res.redirect('/campgrounds');
+    }
+    const campgrounds = await Campground.find({ location: new RegExp(location, 'i') });
+    res.render('campgrounds/allcampgrounds', { campgrounds });
+  };
+  

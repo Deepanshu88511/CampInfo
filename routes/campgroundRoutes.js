@@ -28,6 +28,9 @@ router.route('/')
 
 router.get('/new', isLoggedIn, campgrounds.renderNewForm)
 
+// Search route
+router.get('/search', wrapAsync(campgrounds.searchCampgrounds));
+
 
 router.get('/:id/edit', isLoggedIn, isOwner, wrapAsync(campgrounds.renderEditForm))
 
@@ -36,6 +39,7 @@ router.route('/:id')
     .get(isLoggedIn, wrapAsync(campgrounds.viewCampground))
     .put(isOwner, upload.array('image'), validateCampground, wrapAsync(campgrounds.editCampground))
     .delete(isLoggedIn, isOwner, wrapAsync(campgrounds.deleteCampground))
+    
 
 
 module.exports = router;
