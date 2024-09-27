@@ -27,7 +27,7 @@ const dbUrl= process.env.DB_URL;
 // process.env.DB_URL
 // 'mongodb://127.0.0.1:27017/yelp-final'
 
-mongoose.connect('mongodb://127.0.0.1:27017/yelp-final').then(() => {
+mongoose.connect(dbUrl).then(() => {
   console.log('Database connected successfully..');
 }).catch(() => {
   console.log('Database connection error');
