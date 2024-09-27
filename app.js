@@ -21,6 +21,11 @@ const User=require('./models/users')
 const campgroundRoutes = require('./routes/campgroundRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const userRoutes=require('./routes/userRoutes')
+const MongoStore = require('connect-mongo');
+
+const dbUrl= process.env.DB_URL;
+// process.env.DB_URL
+// 'mongodb://127.0.0.1:27017/yelp-final'
 
 mongoose.connect('mongodb://127.0.0.1:27017/yelp-final').then(() => {
   console.log('Database connected successfully..');
@@ -37,7 +42,21 @@ app.use(express.json());
 app.use(methodoverride('_method'));
 app.engine('ejs', ejsmate);
 
+
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: 'thisshouldbeabettersecret!'
+    }
+});
+
+store.on("error",(err)=>{
+  console.log("Session store error : ",err);
+})
+
 const sessionConfig = {
+  store,
   secret: 'demosecret',
   resave: false,
   saveUninitialized: true,
